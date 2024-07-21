@@ -6,6 +6,7 @@ use super::executor::RawExecResponse;
 use super::ExecResponse;
 use super::ExecResult;
 use super::Executor;
+use super::Package;
 use super::Runtime;
 
 /// A client used to send requests to Piston.
@@ -227,6 +228,36 @@ impl Client {
             .await?;
 
         Ok(runtimes)
+    }
+
+    /// Fetches the packages from Piston. **This is an http request**.
+    /// # Returns
+    /// - [`Result<Vec<Package>, Box<dyn Error>>`] - The available
+    /// packages or the error, if any.
+    /// # Example
+    /// ```no_run
+    /// # #[tokio::test]
+    /// # async fn test_fetch_packages() {
+    /// let client = piston_rs::Client::new();
+    /// if let Ok(packages) = client.fetch_packages().await {
+    ///    assert!(!packages.is_empty());
+    /// } else {
+    ///    // There was an error contacting Piston.
+    /// }
+    /// # }
+    /// ```
+    pub async fn fetch_packages(&self) -> Result<Vec<Package>, Box<dyn Error>> {
+        let endpoint = format!("{}/packages", self.url);
+        let packages = self
+            .client
+            .get(endpoint)
+            .headers(self.headers.clone())
+            .send()
+            .await?
+            .json::<Vec<Package>>()
+            .await?;
+
+        Ok(packages)
     }
 
     /// Executes code using a given executor. **This is an http

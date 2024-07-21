@@ -73,6 +73,14 @@ pub struct Runtime {
     pub aliases: Vec<String>,
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Package {
+    /// The language
+    pub language: String,
+    pub version: String,
+    pub installed: bool,
+}
+
 /// The result from attempting to load a [`File`].
 type LoadResult<T> = Result<T, LoadError>;
 
