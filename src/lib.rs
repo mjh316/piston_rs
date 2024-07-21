@@ -77,7 +77,7 @@ pub struct Runtime {
 pub struct Package {
     /// The language
     pub language: String,
-    pub version: String,
+    pub language_version: String,
     pub installed: bool,
 }
 
