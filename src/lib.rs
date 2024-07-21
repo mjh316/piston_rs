@@ -56,6 +56,12 @@ pub use executor::ExecResponse;
 pub use executor::ExecResult;
 pub use executor::Executor;
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct PackagePayload {
+    pub language: String,
+    pub version: String,
+}
+
 /// A runtime available to be used by Piston.
 ///
 /// ##### Note

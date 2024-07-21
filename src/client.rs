@@ -2,6 +2,8 @@ use std::error::Error;
 
 use reqwest::header::{HeaderMap, HeaderValue};
 
+use crate::PackagePayload;
+
 use super::executor::RawExecResponse;
 use super::ExecResponse;
 use super::ExecResult;
@@ -258,6 +260,26 @@ impl Client {
             .await?;
 
         Ok(packages)
+    }
+
+    pub async fn install_package(
+        &self,
+        language: &str,
+        version: &str,
+    ) -> Result<(), Box<dyn Error>> {
+        let endpoint = format!("{}/packages", self.url);
+        let _result = self
+            .client
+            .post(endpoint)
+            .json::<PackagePayload>(&PackagePayload {
+                language: language.to_string(),
+                version: version.to_string(),
+            })
+            .headers(self.headers.clone())
+            .send()
+            .await?;
+
+        Ok(())
     }
 
     /// Executes code using a given executor. **This is an http
