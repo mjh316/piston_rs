@@ -86,6 +86,22 @@ impl ExecResponse {
     }
 }
 
+fn _default_compile() -> isize {
+    10000
+}
+
+fn _default_run() -> isize {
+    3000
+}
+
+fn _default_memory() -> isize {
+    -1
+}
+
+fn _default_language() -> String {
+    "*".to_string()
+}
+
 /// An object containing information about the code being executed.
 ///
 /// A convenient builder flow is provided by the methods associated with
@@ -97,6 +113,7 @@ pub struct Executor {
     pub language: String,
     /// The version of the language to use for execution.
     /// Defaults to "*" (*most recent version*).
+    #[serde(default = "_default_language")] // Default to "*"
     pub version: String,
     /// **Required** - A `Vector` of `File`'s to send to Piston. The
     /// first file in the vector is considered the main file. Defaults
@@ -104,21 +121,27 @@ pub struct Executor {
     pub files: Vec<File>,
     /// The text to pass as stdin to the program. Defaults to a new
     /// `String`.
+    #[serde(default = "String::new")] // Default to empty string
     pub stdin: String,
     /// The arguments to pass to the program. Defaults to a new
     /// `Vector`.
+    #[serde(default = "Vec::new")] // Default to empty vector
     pub args: Vec<String>,
     /// The maximum allowed time for compilation in milliseconds.
     /// Defaults to `10,000`.
+    #[serde(default = "_default_compile")] // Default to 10,000
     pub compile_timeout: isize,
     /// The maximum allowed time for execution in milliseconds. Defaults
     /// to `3,000`.
+    #[serde(default = "_default_run")] // Default to 3,000
     pub run_timeout: isize,
     /// The maximum allowed memory usage for compilation in bytes.
     /// Defaults to `-1` (*no limit*).
+    #[serde(default = "_default_memory")] // Default to -1
     pub compile_memory_limit: isize,
     /// The maximum allowed memory usage for execution in bytes.
     /// Defaults to `-1` (*no limit*).
+    #[serde(default = "_default_memory")] // Default to -1
     pub run_memory_limit: isize,
 }
 
